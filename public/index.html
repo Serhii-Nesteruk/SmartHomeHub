@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartHome Hub - Магазин розумних гаджетів</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="HomePage.module.css">
+    <link rel="stylesheet" href="ProductsPage.module.css">
+    <link rel="stylesheet" href="ProductDetailsPage.module.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="description" content="Магазин гаджетів для розумного дому - найкращі рішення для вашої оселі">
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" src="ProductsPage.js"></script>
+    <script type="text/babel" src="HomePage.js"></script>
+    <script type="text/babel" src="ProductDetailsPage.js"></script>
+    <script type="text/babel">
+        const App = () => {
+            const [page, setPage] = React.useState('home');
+            const [productId, setProductId] = React.useState(null);
+
+            React.useEffect(() => {
+                const path = window.location.pathname;
+                const productMatch = path.match(/\/product\/(\d+)/);
+                if (productMatch) {
+                    setPage('product');
+                    setProductId(productMatch[1]);
+                } else if (path === '/products') {
+                    setPage('products');
+                }
+            }, []);
+
+            const navigate = (newPage, id = null) => {
+                if (newPage === 'product') {
+                    window.history.pushState(null, '', `/product/${id}`);
+                    setProductId(id);
+                } else {
+                    window.history.pushState(null, '', newPage === 'home' ? '/' : '/products');
+                }
+                setPage(newPage);
+            };
+
+            window.onpopstate = () => {
+                const path = window.location.pathname;
+                const productMatch = path.match(/\/product\/(\d+)/);
+                if (productMatch) {
+                    setPage('product');
+                    setProductId(productMatch[1]);
+                } else {
+                    setPage(path === '/products' ? 'products' : 'home');
+                }
+            };
+
+            if (page === 'product') {
+                return <ProductDetailsPage onNavigate={navigate} productId={parseInt(productId)} />;
+            }
+            return page === 'home' ? 
+                <HomePage onNavigate={navigate} /> : 
+                <ProductsPage onNavigate={navigate} />;
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
