@@ -1,0 +1,61 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Прокидуємо змінні, які читає ваш Pool()
+    env:
+      DB_USER: ${{ secrets.PG_USER }}
+      DB_PASS: ${{ secrets.PG_PASS }}
+      DB_NAME: ${{ secrets.PG_DB }}
+      DB_HOST: localhost
+      DB_PORT: '5432'
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start PostgreSQL container
+        run: |
+          docker run --name ci-postgres \
+            -e POSTGRES_USER=$DB_USER \
+            -e POSTGRES_PASSWORD=$DB_PASS \
+            -e POSTGRES_DB=$DB_NAME \
+            -d -p $DB_PORT:$DB_PORT \
+            postgres:15
+
+      - name: Install psql client & wait for Postgres
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          until PGPASSWORD=$DB_PASS pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do
+            echo "Waiting for Postgres…"
+            sleep 1
+          done
+
+      - name: Apply schema.sql
+        run: |
+          PGPASSWORD=$DB_PASS psql \
+            -h $DB_HOST -p $DB_PORT -U $DB_USER \
+            -d $DB_NAME -f schema.sql
+
+      - name: Setup Node.js v20.18.1
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.1'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test --runInBand

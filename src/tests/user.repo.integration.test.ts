@@ -21,6 +21,7 @@ describe('User API (integration)', () => {
     afterAll(async () => {
         await pool.end();
     });
+
 /* TODO:
     describe('POST /login', async () => {
 
