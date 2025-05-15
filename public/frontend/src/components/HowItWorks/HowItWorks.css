@@ -1,0 +1,155 @@
+.howitworks-section {
+    padding: 80px 24px;
+    background-color: #f9fafb;
+    text-align: center;
+}
+
+.howitworks-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #111827;
+}
+
+.howitworks-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 0;
+}
+
+.howitworks-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.connecting-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.connecting-line path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+}
+
+.connecting-line.animate path {
+    animation: drawLine 2s ease forwards;
+}
+
+@keyframes drawLine {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.step-wrapper {
+    position: relative;
+    width: 40%;
+    margin: 40px 0;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.step-wrapper.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.step-wrapper.left {
+    margin-right: auto;
+}
+
+.step-wrapper.right {
+    margin-left: auto;
+}
+
+.hiw-step-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.hiw-step-wrapper.right {
+    justify-content: flex-end;
+}
+
+.hiw-steps {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.hiw-step {
+    background-color: white;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 280px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.hiw-step:hover {
+    transform: translateY(-5px);
+}
+
+.hiw-icon {
+    width: 48px;
+    height: 48px;
+    color: #3B82F6;
+    margin-bottom: 16px;
+}
+
+.hiw-step h3 {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.hiw-step p {
+    font-size: 0.95rem;
+    color: #6B7280;
+    line-height: 1.4;
+}
+
+.hiw-button {
+    padding: 0.75rem 1.5rem;
+    background-color: #3B82F6;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.hiw-button:hover {
+    background-color: #2563EB;
+}
+
+.howitworks-container {
+    position: relative;
+    width: 100%;
+}
+.howitworks-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+.hiw-steps {
+    position: relative;
+    z-index: 1;
+}
